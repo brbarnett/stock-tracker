@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <title>Stock tracker</title>
+    <style>
+        table {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h3>Static</h3>
+        <table>
+            <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+            </tr>
+            <tr>
+                <td>AAPL</td>
+                <td>$x.xx</td>
+            </tr>
+        </table>
+
+        <h3>Dynamic</h3>
+        <table>
+            <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+            </tr>
+            <tr v-for="symbol in symbols">
+                <td>{{ symbol.symbol }}</td>
+                <td>${{ symbol.c }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                symbols: []
+            }
+        })
+
+        axios.get('http://localhost:3000/api/quote?symbols=AAPL,GOOG,VIG')
+            .then(response => {
+                const symbols = response.data;
+                app.symbols.push(...symbols);
+            })
+            .catch(error => console.error(error));
+    </script>
+</body>
+
+</html>
